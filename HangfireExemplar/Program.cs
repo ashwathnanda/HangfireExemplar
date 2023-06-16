@@ -1,5 +1,6 @@
 using Hangfire;
 using Hangfire.Storage.SQLite;
+using HangfireBasicAuthenticationFilter;
 using HangfireExemplar.Services;
 using HangfireExemplar.Services.impl;
 
@@ -36,7 +37,17 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.UseHangfireDashboard();
+app.UseHangfireDashboard("/hangfire", new DashboardOptions
+{
+    DashboardTitle = "Hangfire Exemplar",
+    Authorization = new[]
+    {
+        new HangfireCustomBasicAuthenticationFilter()
+        {
+            Pass = "lolDontDoThisMan", User = "Ugh"
+        }
+    }
+});
 
 app.MapHangfireDashboard();
 
